@@ -1,0 +1,8 @@
+build
+node_modules
+layer
+.serverless
+.env*
+
+package-lock.json
+yarn.lock
