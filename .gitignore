@@ -6,3 +6,6 @@ layer
 
 package-lock.json
 yarn.lock
+
+*.mp3
+*.mp4

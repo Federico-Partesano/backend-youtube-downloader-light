@@ -12,7 +12,9 @@ import * as http from "http";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
 
 const port = process.env.PORT || 3005;
+export let statusServer = "await";
 
+export const setStatusServer = (newStatus: "downloading" | "await") => statusServer = newStatus
 export let socketConnection: socketio.Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any> | null = null;
 
 
@@ -26,7 +28,7 @@ const io = new socketio.Server(server, {cors: {
  }})
 
 
- let connections: Record<string, string> = {}
+//  let connections: Record<string, string> = {}
  io.on('connection',(socket) =>{
   socketConnection = socket;
    socket.on("conn", (message) => {
