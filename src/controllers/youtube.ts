@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { API_HOST, API_KEY } from "../enviroument";
 import * as yt from "youtube-search-without-api-key";
 
 // @ts-ignore
