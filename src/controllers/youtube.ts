@@ -86,4 +86,10 @@ export const youtubeController = {
      startDownload(getFileName, videoId);
     return res.json({ status: "in downloading" });
   },
+  getDownloadedAudio:  async (
+    {}: Request,
+    res: Response<Error | any | SuccessMessage>
+  ) => {
+    res.sendFile(__dirname, "/src/audio.mp3");
+   }
 };
