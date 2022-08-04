@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import * as yt from "youtube-search-without-api-key";
 import youtubedl, { YtResponse } from "youtube-dl-exec";
-
+import path from "path";
 // @ts-ignore
 import youtubedls from "youtube-dl";
 
@@ -12,7 +12,7 @@ import { v4 as uuidv4 } from "uuid";
 import { setStatusServer, socketConnection, statusServer } from "..";
 
 let processingFile: string[] = [];
-
+let songName = "";
 const ffmpegInstance = createFFmpeg({ log: true });
 let ffmpegLoadingPromise: undefined | Promise<void> = ffmpegInstance.load();
 
@@ -78,6 +78,7 @@ export const youtubeController = {
       `https://www.youtube.com/watch?v=${videoId}`,
       { getFilename: true, format: "mp4" }
     )) as any as string;
+    songName = getFileName;
     // const format = await youtubedl(`https://www.youtube.com/watch?v=${videoId}`, { getFormat: true, format: "mp4"})  as any as string;
     // const info: any = await youtubedl(`https://www.youtube.com/watch?v=${videoId}`, { dumpJson: true ,format: "mp4"});
 
@@ -90,6 +91,7 @@ export const youtubeController = {
     {}: Request,
     res: Response<Error | any | SuccessMessage>
   ) => {
-    res.sendFile(__dirname, "/src/audio.mp3");
+    return res.download(`${path.join(__dirname).split("/").splice(0, path.join(__dirname).split("/").length - 2).join("/")}/audio.mp3`);
    }
 };
+console.log()
