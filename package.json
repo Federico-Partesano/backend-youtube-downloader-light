@@ -28,7 +28,6 @@
     "nodemon": "^2.0.15",
     "socket.io": "^4.4.0",
     "ts-loader": "^9.2.6",
-    "uuid": "^8.3.2",
     "video-to-audio": "^1.0.1",
     "ws": "^8.5.0",
     "youtube-dl": "^3.5.0",

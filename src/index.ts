@@ -18,6 +18,8 @@ export const setStatusServer = (newStatus: "downloading" | "await") => statusSer
 export let socketConnection: socketio.Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any> | null = null;
 
 
+let connectionSocket: Record<string, string> = {};
+
 
 const app = express();
 const server = http.createServer(app);
@@ -33,8 +35,16 @@ const io = new socketio.Server(server, {cors: {
   socketConnection = socket;
    socket.on("conn", (message) => {
      console.log(message);
+     if(Object.values(connectionSocket).some((connection) => connection === message.id)){
+      socketConnection?.emit("disconnectClient");
+     } else {
+       connectionSocket[socket.id] = message.id;
+     }
    })
-  
+
+   socket.on("disconnect", (s) => {
+    delete connectionSocket[socket.id];
+   })
 
  })
 

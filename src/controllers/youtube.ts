@@ -27,9 +27,6 @@ async function getFFmpeg() {
 
 const startDownload = async (getFileName: string, videoId: string) =>
   new Promise(async (resolve) => {
-    setStatusServer("downloading")
-    socketConnection?.emit(`status`, {status: "downloading"});
-    socketConnection?.broadcast.emit(`status`, {status: "downloading"});
     await youtubedl(`https://www.youtube.com/watch?v=${videoId}`, {
       format: "mp4",
     });
@@ -47,8 +44,8 @@ const startDownload = async (getFileName: string, videoId: string) =>
         ffmpeg.FS("readFile", `audio.mp3`)
       );
       setTimeout(() => {
-        socketConnection?.emit(`status`, {status: "await"});
-        socketConnection?.broadcast.emit(`status`, {status: "await"});
+        socketConnection?.emit(`status`, {status: "await", videoId});
+        socketConnection?.broadcast.emit(`status`, {status: "await", videoId});
       }, 500)
     setStatusServer("await")
       resolve(0);
@@ -73,7 +70,9 @@ export const youtubeController = {
     { query: { videoId } }: Request<{}, {}, {}, { videoId: string }>,
     res: Response<Error | any | SuccessMessage>
   ) => {
-    if(statusServer !== "await") return res.json({status: "await"})
+    if(statusServer !== "await") return res.json({status: "await"});
+    socketConnection?.emit(`status`, {status: "downloading"});
+    socketConnection?.broadcast.emit(`status`, {status: "downloading"});
     const getFileName = (await youtubedl(
       `https://www.youtube.com/watch?v=${videoId}`,
       { getFilename: true, format: "mp4" }
