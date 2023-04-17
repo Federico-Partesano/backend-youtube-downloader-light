@@ -2,7 +2,7 @@
   "name": "youtube-downloader-api",
   "version": "1.0.0",
   "engines": {
-    "node": "16.13.2"
+    "node": "16.18.1"
   },
   "description": "",
   "main": "index.js",
@@ -35,7 +35,7 @@
     "youtube-mp3-converter": "^1.0.3",
     "youtube-search-without-api-key": "^1.0.7",
     "yt-mp3-dl": "^1.0.1",
-    "ytdl-core": "^4.11.0"
+    "ytdl-core": "https://github.com/khlevon/node-ytdl-core.git#v4.11.3-patch.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",

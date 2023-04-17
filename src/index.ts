@@ -36,7 +36,6 @@ const io = new socketio.Server(server, {cors: {
  io.on('connection',(socket) =>{
   socketConnection = socket;
    socket.on("conn", (message) => {
-     console.log(message);
      if(Object.values(connectionSocket).some((connection) => connection === message.id)){
       socketConnection?.emit("disconnectClient");
      } else {
@@ -44,7 +43,7 @@ const io = new socketio.Server(server, {cors: {
      }
    })
 
-   socket.on("disconnect", (s) => {
+   socket.on("disconnect", () => {
     delete connectionSocket[socket.id];
    })
 
