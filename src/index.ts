@@ -11,54 +11,59 @@ import * as socketio from "socket.io";
 import * as http from "http";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
 
-const port = process.env.PORT || 3005;
+const port = 3000;
 export let statusServer = "await";
 
-export const setStatusServer = (newStatus: "downloading" | "await") => statusServer = newStatus
-export let socketConnection: socketio.Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any> | null = null;
-
+export const setStatusServer = (newStatus: "downloading" | "await") =>
+  (statusServer = newStatus);
+export let socketConnection: socketio.Socket<
+  DefaultEventsMap,
+  DefaultEventsMap,
+  DefaultEventsMap,
+  any
+> | null = null;
 
 let connectionSocket: Record<string, string> = {};
-
 
 const app = express();
 const server = http.createServer(app);
 app.use(cors());
 app.options("*", cors() as any);
 
-const io = new socketio.Server(server, {cors: {
-  origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE"]
- }})
-
+const io = new socketio.Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  },
+});
 
 //  let connections: Record<string, string> = {}
- io.on('connection',(socket) =>{
+io.on("connection", (socket) => {
   socketConnection = socket;
-   socket.on("conn", (message) => {
-     if(Object.values(connectionSocket).some((connection) => connection === message.id)){
+  socket.on("conn", (message) => {
+    if (
+      Object.values(connectionSocket).some(
+        (connection) => connection === message.id
+      )
+    ) {
       socketConnection?.emit("disconnectClient");
-     } else {
-       connectionSocket[socket.id] = message.id;
-     }
-   })
+    } else {
+      connectionSocket[socket.id] = message.id;
+    }
+  });
 
-   socket.on("disconnect", () => {
+  socket.on("disconnect", () => {
     delete connectionSocket[socket.id];
-   })
-
- })
-
+  });
+});
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-
 app.use("/youtube", youtube);
-app.get("/", (req, res) =>{
-return res.json({message: "ok"})
-})
-
+app.get("/", (req, res) => {
+  return res.json({ message: "ok" });
+});
 
 class TestController {
   static testEndpoint = async (req: Request) => {
@@ -67,7 +72,13 @@ class TestController {
   };
 }
 
-
+app.get(
+  "/hello",
+  // ----
+  (request, response) => {
+    response.json({ message: "ok" });
+  }
+);
 
 app.get(
   "/test",
@@ -76,9 +87,6 @@ app.get(
 );
 app.use(errorHandler);
 
-server.listen(port ,() => console.log("Server is running"));
-
-
+server.listen(port, () => console.log("Server is running"));
 
 export default app;
-
